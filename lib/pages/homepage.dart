@@ -1,3 +1,5 @@
+// import 'dart:html';
+
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -9,6 +11,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TextEditingController searchController = new TextEditingController();
+  List<String> navBarItem = [
+    'Trending News',
+    'India',
+    'World',
+    'Finance',
+    'Health'
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +59,39 @@ class _HomePageState extends State<HomePage> {
                   ),
                 )
               ],
+            ),
+          ),
+          Container(
+            height: 50,
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: navBarItem.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    print(navBarItem[index]);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Center(
+                      child: Text(
+                        navBarItem[index],
+                        style: TextStyle(
+                          fontSize: 19,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],
