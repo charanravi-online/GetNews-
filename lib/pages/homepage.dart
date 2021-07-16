@@ -1,7 +1,11 @@
 // import 'dart:html';
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:getnews/models/model.dart';
+import 'package:http/http.dart';
 
 class HomePage extends StatefulWidget {
   // const HomePage({Key? key}) : super(key: key);
@@ -12,6 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TextEditingController searchController = new TextEditingController();
+  List<NewsQuery> newsModelList = <NewsQuery>[];
   List<String> navBarItem = [
     'Trending News',
     'India',
@@ -19,6 +24,49 @@ class _HomePageState extends State<HomePage> {
     'Finance',
     'Health'
   ];
+
+  bool isLoading = true;
+  getNewsByQuery(String query) async {
+    String url =
+        "https://newsapi.org/v2/everything?q=$query&from=2021&sortBy=publishedAt&apiKey=2944d5dc48ef4b14ac81054d6c748062";
+    Response response = await get(Uri.parse(url));
+    Map data = jsonDecode(response.body);
+    setState(() {
+      data['articles'].forEach((element) {
+        NewsQuery recipeModel = new NewsQuery();
+        recipeModel = NewsQuery.fromMap(element);
+        newsModelList.add(recipeModel);
+        setState(() {
+          isLoading = false;
+        });
+      });
+    });
+  }
+
+  getNewsByProvider(String provider) async {
+    String url =
+        "https://newsapi.org/v2/top-headlines?sources=$provider&apiKey=2944d5dc48ef4b14ac81054d6c748062";
+    Response response = await get(Uri.parse(url));
+    Map data = jsonDecode(response.body);
+    setState(() {
+      data['articles'].forEach((element) {
+        NewsQuery recipeModel = new NewsQuery();
+        recipeModel = NewsQuery.fromMap(element);
+        newsModelList.add(recipeModel);
+        setState(() {
+          isLoading = false;
+        });
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getNewsByQuery('India');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                       decoration: InputDecoration(
                           border: InputBorder.none, hintText: "Search "),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -98,86 +146,179 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
-            CarouselSlider(
-              options: CarouselOptions(
-                height: 200,
-                autoPlay: true,
-                enlargeCenterPage: true,
-              ),
-              items: items.map((item) {
-                return Builder(builder: (BuildContext context) {
-                  return InkWell(
-                    onTap: () {
-                      print('banner');
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 20),
-                      child: Text(item),
-                    ),
-                  );
-                });
-              }).toList(),
-              // options: options
-            ),
             Container(
-              child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
+              margin: EdgeInsets.symmetric(vertical: 15),
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  height: 200,
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                ),
+                items: newsModelList.map((instance) {
+                  return Builder(builder: (BuildContext context) {
                     return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       child: Card(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        elevation: 4.0,
+                            borderRadius: BorderRadius.circular(10)),
                         child: Stack(
                           children: [
                             ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Image.asset("images/breakingnews.jpg")),
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                instance.newsImg,
+                                fit: BoxFit.fill,
+                                width: double.infinity,
+                              ),
+                            ),
                             Positioned(
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.black,
+                                      Colors.black12.withOpacity(0),
+                                    ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                  ),
+                                ),
                                 child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Colors.black,
-                                        Colors.black.withOpacity(0),
-                                      ],
-                                      // begin: Alignment.topCenter,
-                                      // end: Alignment.bottomCenter,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 10),
+                                  child: Container(
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    child: Text(
+                                      instance.newsHead,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                  padding: EdgeInsets.fromLTRB(
-                                      15, 15, 10, 8),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'News Headline',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        'new new newnwe ewnwnew',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                )),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     );
-                  }),
+                  });
+                }).toList(),
+                // options: options
+              ),
+            ),
+            Container(
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(
+                      15,
+                      25,
+                      0,
+                      0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Latest News',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: newsModelList.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            elevation: 4.0,
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                    newsModelList[index].newsImg,
+                                    fit: BoxFit.fitHeight,
+                                    width: double.infinity,
+                                    height: 230,
+                                  ),
+                                ),
+                                Positioned(
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Colors.black,
+                                            Colors.black.withOpacity(0),
+                                          ],
+                                          // begin: Alignment.topCenter,
+                                          // end: Alignment.bottomCenter,
+                                        ),
+                                      ),
+                                      padding:
+                                          EdgeInsets.fromLTRB(15, 15, 10, 8),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            newsModelList[index].newsHead,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            newsModelList[index]
+                                                        .newsDes
+                                                        .length >
+                                                    50
+                                                ? "${newsModelList[index].newsDes.substring(0, 55)}..."
+                                                : newsModelList[index].newsDes,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12),
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {}, child: Text('show more')),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
