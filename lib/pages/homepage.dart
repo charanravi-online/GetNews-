@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:getnews/models/model.dart';
+import 'package:getnews/pages/category.dart';
 import 'package:http/http.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,6 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController searchController = new TextEditingController();
   List<NewsQuery> newsModelList = <NewsQuery>[];
+  List<NewsQuery> newsModelListCarousel = <NewsQuery>[];
   List<String> navBarItem = [
     'Trending News',
     'India',
@@ -43,16 +45,16 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  getNewsByProvider(String provider) async {
+  getNewsOfIndia() async {
     String url =
-        "https://newsapi.org/v2/top-headlines?sources=$provider&apiKey=2944d5dc48ef4b14ac81054d6c748062";
+        "https://newsapi.org/v2/top-headlines?country=in&apiKey=2944d5dc48ef4b14ac81054d6c748062";
     Response response = await get(Uri.parse(url));
     Map data = jsonDecode(response.body);
     setState(() {
       data['articles'].forEach((element) {
         NewsQuery recipeModel = new NewsQuery();
         recipeModel = NewsQuery.fromMap(element);
-        newsModelList.add(recipeModel);
+        newsModelListCarousel.add(recipeModel);
         setState(() {
           isLoading = false;
         });
@@ -65,6 +67,7 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     getNewsByQuery('India');
+    getNewsOfIndia();
   }
 
   @override
@@ -121,7 +124,13 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                      print(navBarItem[index]);
+                      // print(navBarItem[index]);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Category(
+                                    query: navBarItem[index],
+                                  )));
                     },
                     child: Container(
                       padding:
@@ -154,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                   autoPlay: true,
                   enlargeCenterPage: true,
                 ),
-                items: newsModelList.map((instance) {
+                items: newsModelListCarousel.map((instance) {
                   return Builder(builder: (BuildContext context) {
                     return Container(
                       child: Card(
@@ -168,6 +177,7 @@ class _HomePageState extends State<HomePage> {
                                 instance.newsImg,
                                 fit: BoxFit.fill,
                                 width: double.infinity,
+                                height: double.maxFinite,
                               ),
                             ),
                             Positioned(
