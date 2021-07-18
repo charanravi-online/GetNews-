@@ -21,44 +21,70 @@ class _HomePageState extends State<HomePage> {
   List<NewsQuery> newsModelListCarousel = <NewsQuery>[];
   List<String> navBarItem = [
     'Trending News',
+    'Covid-19',
+    'Lockdown',
+    'Mental Health',
     'India',
     'World',
     'Finance',
-    'Health'
+    'Bussiness',
+    'Health',
   ];
 
   bool isLoading = true;
   getNewsByQuery(String query) async {
+    Map element;
+    int i = 0;
     String url =
-        "https://newsapi.org/v2/everything?q=$query&from=2021&sortBy=publishedAt&apiKey=2944d5dc48ef4b14ac81054d6c748062";
+        "https://newsapi.org/v2/everything?q=$query&language=en&sortBy=publishedAt&apiKey=2944d5dc48ef4b14ac81054d6c748062";
     Response response = await get(Uri.parse(url));
     Map data = jsonDecode(response.body);
     setState(() {
-      data['articles'].forEach((element) {
-        NewsQuery recipeModel = new NewsQuery();
-        recipeModel = NewsQuery.fromMap(element);
-        newsModelList.add(recipeModel);
-        setState(() {
-          isLoading = false;
-        });
-      });
+      for (element in data["articles"]) {
+        try {
+          i++;
+          NewsQuery recipeModel = new NewsQuery();
+          recipeModel = NewsQuery.fromMap(element);
+          newsModelList.add(recipeModel);
+          setState(() {
+            isLoading = false;
+          });
+          if (i == 5) {
+            break;
+          }
+        } catch (e) {
+          print(e);
+        }
+        ;
+      }
     });
   }
 
-  getNewsOfIndia() async {
+  getNewsOfIndia(String query) async {
+    Map element;
+    int i = 0;
     String url =
         "https://newsapi.org/v2/top-headlines?country=in&apiKey=2944d5dc48ef4b14ac81054d6c748062";
     Response response = await get(Uri.parse(url));
     Map data = jsonDecode(response.body);
     setState(() {
-      data['articles'].forEach((element) {
-        NewsQuery recipeModel = new NewsQuery();
-        recipeModel = NewsQuery.fromMap(element);
-        newsModelListCarousel.add(recipeModel);
-        setState(() {
-          isLoading = false;
-        });
-      });
+      for (element in data["articles"]) {
+        try {
+          i++;
+          NewsQuery recipeModel = new NewsQuery();
+          recipeModel = NewsQuery.fromMap(element);
+          newsModelListCarousel.add(recipeModel);
+          setState(() {
+            isLoading = false;
+          });
+          if (i == 7) {
+            break;
+          }
+        } catch (e) {
+          print(e);
+        }
+        ;
+      }
     });
   }
 
@@ -67,7 +93,7 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     getNewsByQuery('India');
-    getNewsOfIndia();
+    getNewsOfIndia("");
   }
 
   @override
@@ -180,58 +206,68 @@ class _HomePageState extends State<HomePage> {
                       ),
                       items: newsModelListCarousel.map((instance) {
                         return Builder(builder: (BuildContext context) {
-                          return Container(
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      instance.newsImg,
-                                      fit: BoxFit.fill,
-                                      width: double.infinity,
-                                      height: double.maxFinite,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Colors.black,
-                                            Colors.black12.withOpacity(0),
-                                          ],
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                        ),
+                          try {
+                            return Container(
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: 
+                                      
+                                      
+                                      Image.network(
+                                        instance.newsImg == null ? 
+                                        AssetImage('images/breakingnews.jpg') : instance.newsImg,
+                                        fit: BoxFit.fill,
+                                        width: double.infinity,
+                                        height: double.maxFinite,
                                       ),
+                                    ),
+                                    Positioned(
+                                      left: 0,
+                                      right: 0,
+                                      bottom: 0,
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 5, vertical: 10),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Colors.black,
+                                              Colors.black12.withOpacity(0),
+                                            ],
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                          ),
+                                        ),
                                         child: Container(
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          child: Text(
-                                            instance.newsHead,
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5, vertical: 10),
+                                          child: Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            child: Text(
+                                              instance.newsHead,
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          } catch (e) {
+                            print(e);
+                            return Container();
+                          } //error handling for carousel effect
                         });
                       }).toList(),
                       // options : options
@@ -272,6 +308,7 @@ class _HomePageState extends State<HomePage> {
                           shrinkWrap: true,
                           itemCount: newsModelList.length,
                           itemBuilder: (context, index) {
+                            try {
                             return Container(
                               margin: EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 5),
@@ -341,6 +378,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             );
+                            } catch (e) {
+                              print(e);
+                              return Container();
+                            } //error handling for top news section
                           }),
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
@@ -353,7 +394,7 @@ class _HomePageState extends State<HomePage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Category(
-                                            query: "Top News",
+                                            query: "Latest",
                                           )));
                             },
                             child: Text('show more')),

@@ -19,26 +19,38 @@ class _CategoryState extends State<Category> {
 
   bool isLoading = true;
   getNewsByQuery(String query) async {
+    Map element;
+    int i = 0;
     String url;
     if (query == "Trending News" || query == "India") {
       url =
-          "https://newsapi.org/v2/top-headlines?country=in&apiKey=2944d5dc48ef4b14ac81054d6c748062";
+          "https://newsapi.org/v2/top-headlines?country=in&language=en&apiKey=2944d5dc48ef4b14ac81054d6c748062";
     } else {
       url =
-          "https://newsapi.org/v2/everything?q=$query&from=2021&sortBy=publishedAt&apiKey=2944d5dc48ef4b14ac81054d6c748062";
+          "https://newsapi.org/v2/everything?q=$query&language=en&sortBy=popularity&apiKey=2944d5dc48ef4b14ac81054d6c748062";
     }
 
     Response response = await get(Uri.parse(url));
     Map data = jsonDecode(response.body);
     setState(() {
-      data['articles'].forEach((element) {
-        NewsQuery recipeModel = new NewsQuery();
-        recipeModel = NewsQuery.fromMap(element);
-        newsModelList.add(recipeModel);
-        setState(() {
-          isLoading = false;
-        });
-      });
+      // data['articles'].forEach((element) {
+      for (element in data["articles"]) {
+        try {
+          i++;
+          NewsQuery recipeModel = new NewsQuery();
+          recipeModel = NewsQuery.fromMap(element);
+          newsModelList.add(recipeModel);
+          setState(() {
+            isLoading = false;
+          });
+          if (i == 20) {
+            break;
+          }
+        } catch (e) {
+          print(e);
+        }
+        ;
+      }
     });
   }
 
@@ -116,6 +128,13 @@ class _CategoryState extends State<Category> {
                                     width: double.infinity,
                                     height: 230,
                                   ),
+                                  //   Image.network(                                    //error handling in process
+                                  //   newsModelList[index].newsImg == null? 
+                                  //   AssetImage('images/breakingnews.jpg') : newsModelList[index].newsImg,
+                                  //   fit: BoxFit.fitHeight,
+                                  //   width: double.infinity,
+                                  //   height: 230,
+                                  // ),
                                 ),
                                 Positioned(
                                     left: 0,
