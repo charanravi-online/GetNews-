@@ -86,72 +86,85 @@ class _CategoryState extends State<Category> {
                   ],
                 ),
               ),
-              ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: newsModelList.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        elevation: 4.0,
-                        child: Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: Image.network(
-                                newsModelList[index].newsImg,
-                                fit: BoxFit.fitHeight,
-                                width: double.infinity,
-                                height: 230,
-                              ),
-                            ),
-                            Positioned(
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Colors.black,
-                                        Colors.black.withOpacity(0),
-                                      ],
-                                      // begin: Alignment.topCenter,
-                                      // end: Alignment.bottomCenter,
-                                    ),
-                                  ),
-                                  padding: EdgeInsets.fromLTRB(15, 15, 10, 8),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        newsModelList[index].newsHead,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        newsModelList[index].newsDes.length > 50
-                                            ? "${newsModelList[index].newsDes.substring(0, 55)}..."
-                                            : newsModelList[index].newsDes,
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                )),
-                          ],
-                        ),
+              isLoading
+                  ? Container(
+                      height: MediaQuery.of(context).size.height - 450,
+                      child: Center(
+                        child: CircularProgressIndicator(),
                       ),
-                    );
-                  }),
+                    )
+                  : ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: newsModelList.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            elevation: 4.0,
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                    newsModelList[index].newsImg,
+                                    fit: BoxFit.fitHeight,
+                                    width: double.infinity,
+                                    height: 230,
+                                  ),
+                                ),
+                                Positioned(
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Colors.black,
+                                            Colors.black.withOpacity(0),
+                                          ],
+                                          // begin: Alignment.topCenter,
+                                          // end: Alignment.bottomCenter,
+                                        ),
+                                      ),
+                                      padding:
+                                          EdgeInsets.fromLTRB(15, 15, 10, 8),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            newsModelList[index].newsHead,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            newsModelList[index]
+                                                        .newsDes
+                                                        .length >
+                                                    50
+                                                ? "${newsModelList[index].newsDes.substring(0, 55)}..."
+                                                : newsModelList[index].newsDes,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12),
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
             ],
           ),
         ),
