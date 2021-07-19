@@ -56,7 +56,6 @@ class _HomePageState extends State<HomePage> {
         } catch (e) {
           print(e);
         }
-        ;
       }
     });
   }
@@ -78,13 +77,12 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             isLoading = false;
           });
-          if (i == 7) {
+          if (i == 5) {
             break;
           }
         } catch (e) {
           print(e);
         }
-        ;
       }
     });
   }
@@ -221,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                               child: InkWell(
                                 onTap: () {
                                   Navigator.push(
-                                      context,
+                                      context,                                   //webview for carousal news
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               NewsView(instance.newsUrl)));
