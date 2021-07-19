@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:getnews/pages/homepage.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent, 
+    statusBarBrightness: Brightness.light,
+    
+    // transparent status bar
+    ));
   runApp(MyApp());
 }
 
@@ -21,7 +29,8 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        // primarySwatch: Color(0xff303a52),
+        primaryColor: Color(0xff303a52),
       ),
       home: HomePage()
     );

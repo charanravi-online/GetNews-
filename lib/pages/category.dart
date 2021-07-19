@@ -67,6 +67,7 @@ class _CategoryState extends State<Category> {
       appBar: AppBar(
         title: Text('GetNews'),
         centerTitle: true,
+        backgroundColor: Color(0xff574b90),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -88,8 +89,10 @@ class _CategoryState extends State<Category> {
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 15),
                       child: Text(
+                        
                         widget.query,
                         style: TextStyle(
+                          color: Color(0xff303a52),
                           fontWeight: FontWeight.bold,
                           fontSize: 35,
                         ),
@@ -100,6 +103,7 @@ class _CategoryState extends State<Category> {
               ),
               isLoading
                   ? Container(
+                     
                       height: MediaQuery.of(context).size.height - 450,
                       child: Center(
                         child: CircularProgressIndicator(),
@@ -111,17 +115,20 @@ class _CategoryState extends State<Category> {
                       itemCount: newsModelList.length,
                       itemBuilder: (context, index) {
                         return Container(
+                          
                           margin:
                               EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(           //newsview for categories section
+                              Navigator.push(
+                                  //newsview for categories section
                                   context,
-                                  MaterialPageRoute(                     
+                                  MaterialPageRoute(
                                       builder: (context) => NewsView(
                                           newsModelList[index].newsUrl)));
                             },
                             child: Card(
+                              color: Color(0xff303a52), //card in category
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),

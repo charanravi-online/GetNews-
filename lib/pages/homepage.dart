@@ -22,12 +22,15 @@ class _HomePageState extends State<HomePage> {
   List<NewsQuery> newsModelListCarousel = <NewsQuery>[];
   List<String> navBarItem = [
     'Trending News',
-    'Covid-19',
-    'Lockdown',
-    'Mental Health',
     'India',
     'World',
-    'Finance',
+    'Covid-19',
+    'Technology',
+    'Entertainment',
+    'Current Affairs',
+    'Sports',
+    'Lifestyle',
+    
     'Bussiness',
     'Health',
   ];
@@ -99,6 +102,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xff574b90),
         title: Text('GetNews'),
         centerTitle: true,
       ),
@@ -130,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                     child: Container(
                       child: Icon(
                         Icons.search,
-                        color: Colors.blueAccent,
+                        color: Color(0xff303a52),
                       ),
                       margin: EdgeInsets.fromLTRB(3, 0, 7, 0),
                     ),
@@ -139,6 +143,7 @@ class _HomePageState extends State<HomePage> {
                     child: TextField(
                       controller: searchController,
                       textInputAction: TextInputAction.search,
+                      cursorColor: Color(0xff303a52),
                       onSubmitted: (value) {
                         if (value == "") {
                           print('Blank Search');
@@ -182,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                           EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       margin: EdgeInsets.symmetric(horizontal: 5),
                       decoration: BoxDecoration(
-                        color: Colors.blue,
+                        color: Color(0xff303a52),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: Center(
@@ -208,6 +213,9 @@ class _HomePageState extends State<HomePage> {
                       child: Center(child: CircularProgressIndicator()))
                   : CarouselSlider(
                       options: CarouselOptions(
+                        enableInfiniteScroll: true,
+                        
+                        
                         height: 200,
                         autoPlay: true,
                         enlargeCenterPage: true,
@@ -219,12 +227,13 @@ class _HomePageState extends State<HomePage> {
                               child: InkWell(
                                 onTap: () {
                                   Navigator.push(
-                                      context,                                   //webview for carousal news
+                                      context, //webview for carousal news
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               NewsView(instance.newsUrl)));
                                 },
                                 child: Card(
+                                  color: Color(0xff303a52),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Stack(
@@ -232,6 +241,16 @@ class _HomePageState extends State<HomePage> {
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: Image.network(
+
+
+                                           
+                                        //   instance.newsImg,
+                                        //   fit: BoxFit.fitHeight,
+                                        //   width: double.infinity,
+                                        //   height: 230,
+                                        // ),
+
+
                                           instance.newsImg == null
                                               ? AssetImage(
                                                   'images/breakingnews.jpg')
@@ -291,6 +310,7 @@ class _HomePageState extends State<HomePage> {
                     ),
             ),
             Container(
+              color: Color(0xff303a52),
               child: Column(
                 children: [
                   Container(
@@ -307,6 +327,7 @@ class _HomePageState extends State<HomePage> {
                           'Latest News',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
+                            color: Colors.white,
                             fontSize: 28,
                           ),
                         ),
@@ -338,6 +359,7 @@ class _HomePageState extends State<HomePage> {
                                                 newsModelList[index].newsUrl)));
                                   },
                                   child: Card(
+                                    color: Color(0xff9e579d),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15),
                                     ),
