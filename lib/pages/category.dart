@@ -122,19 +122,22 @@ class _CategoryState extends State<Category> {
                               children: [
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(15),
-                                  child: Image.network(
-                                    newsModelList[index].newsImg,
+                                  child:
+                                      // Image.network(
+                                      //   newsModelList[index].newsImg,
+                                      //   fit: BoxFit.fitHeight,
+                                      //   width: double.infinity,
+                                      //   height: 230,
+                                      // ),
+                                      Image.network(
+                                    //error handling in process
+                                    newsModelList[index].newsImg == null
+                                        ? AssetImage('images/breakingnews.jpg')
+                                        : newsModelList[index].newsImg,
                                     fit: BoxFit.fitHeight,
                                     width: double.infinity,
                                     height: 230,
                                   ),
-                                  //   Image.network(                                    //error handling in process
-                                  //   newsModelList[index].newsImg == null? 
-                                  //   AssetImage('images/breakingnews.jpg') : newsModelList[index].newsImg,
-                                  //   fit: BoxFit.fitHeight,
-                                  //   width: double.infinity,
-                                  //   height: 230,
-                                  // ),
                                 ),
                                 Positioned(
                                     left: 0,
