@@ -29,6 +29,7 @@ class _NewsViewState extends State<NewsView> {
     return Scaffold(
       appBar: AppBar(
         title: Text("GetNews"),
+        centerTitle: true,
       ),
       body: Container(
         child: WebView(

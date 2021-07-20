@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         // primarySwatch: Color(0xff303a52),
         primaryColor: Color(0xff303a52),
       ),
-      home: HomePage()
+      home: HomePage(),
     );
   }
 }

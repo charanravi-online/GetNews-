@@ -30,7 +30,6 @@ class _HomePageState extends State<HomePage> {
     'Current Affairs',
     'Sports',
     'Lifestyle',
-    
     'Bussiness',
     'Health',
   ];
@@ -53,7 +52,7 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             isLoading = false;
           });
-          if (i == 5) {
+          if (i == 6) {
             break;
           }
         } catch (e) {
@@ -80,7 +79,7 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             isLoading = false;
           });
-          if (i == 5) {
+          if (i == 4) {
             break;
           }
         } catch (e) {
@@ -214,8 +213,6 @@ class _HomePageState extends State<HomePage> {
                   : CarouselSlider(
                       options: CarouselOptions(
                         enableInfiniteScroll: true,
-                        
-                        
                         height: 200,
                         autoPlay: true,
                         enlargeCenterPage: true,
@@ -241,15 +238,11 @@ class _HomePageState extends State<HomePage> {
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: Image.network(
-
-
-                                           
-                                        //   instance.newsImg,
-                                        //   fit: BoxFit.fitHeight,
-                                        //   width: double.infinity,
-                                        //   height: 230,
-                                        // ),
-
+                                          //   instance.newsImg,
+                                          //   fit: BoxFit.fitHeight,
+                                          //   width: double.infinity,
+                                          //   height: 230,
+                                          // ),
 
                                           instance.newsImg == null
                                               ? AssetImage(
